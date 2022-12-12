@@ -41,9 +41,9 @@ class ViewController: UIViewController, UITextViewDelegate{
         textFild.inputAccessoryView = tooBar
         
         // Create MyPickerView
-        //        myPicker.frame = CGRect(x: 20, y: 650, width: 50, height: 50)
-        //        myPicker.center = CGRect(x: 20, y: 650, width: 0, height: 0)
-        
+                myPicker.frame = CGRect(x: 150, y: 650, width: 100, height: 100)
+//        myPicker.center = view.center
+        myPicker.dataSource = self
         self.view.addSubview(myPicker)
         
         
@@ -170,14 +170,14 @@ class ViewController: UIViewController, UITextViewDelegate{
 }
 
 
-extension   ViewController: UIPickerViewDelegate{
+extension   ViewController: UIPickerViewDataSource{
     
     func numberOfComponents(in pickerView: UIPickerView) -> Int {
         return 1
         
     }
     
-    func pickerView(_ pickerView: UIPickerView, widthForComponent component: Int) -> CGFloat {
+    func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
         return 10
     }
     
