@@ -15,7 +15,10 @@ class ViewController: UIViewController, UITextViewDelegate{
     let textFild = UITextField()
     let mySwitch = UISwitch()
     let myPicker = UIPickerView()
-    
+    var myModel = ModelData()
+    var selectedMarka: Marka?
+    var selectedModel: Model?
+    let lebleData = UILabel()
     
     
     
@@ -29,6 +32,13 @@ class ViewController: UIViewController, UITextViewDelegate{
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        // Add Lable
+        self.view.addSubview(lebleData)
+        self.lebleData.text = "TEST_TEST"
+        self.lebleData.frame = CGRect(x: 150, y: 600, width: 200, height: 30)
+        
+        
         // Add Done Button
         
         let tooBar: UIToolbar = UIToolbar()
@@ -41,7 +51,8 @@ class ViewController: UIViewController, UITextViewDelegate{
         textFild.inputAccessoryView = tooBar
         
         // Create MyPickerView
-                myPicker.frame = CGRect(x: 150, y: 650, width: 100, height: 100)
+        myPicker.frame = CGRect(x: 50, y: 650, width: 300, height: 100)
+        myPicker.delegate = self
 //        myPicker.center = view.center
         myPicker.dataSource = self
         self.view.addSubview(myPicker)
@@ -173,20 +184,58 @@ class ViewController: UIViewController, UITextViewDelegate{
 extension   ViewController: UIPickerViewDataSource{
     
     func numberOfComponents(in pickerView: UIPickerView) -> Int {
-        return 1
+        return 2
         
     }
     
     func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
-        return 10
+        switch component {
+        case 0:
+            return myModel.marks.count
+        case 1:
+            return myModel.modelsByMark.count
+        default:
+            return 0;
+        }
     }
     
-    //    func numberOfRows(inComponent component: Int) -> Int {
-    //        return 10
-    //    }
-    //
-    //    func rowSize(forComponent component: Int) -> CGSize{
-    //        return CGSize(width: 100, height: 100)
-    //    }
+ 
+}
+
+extension ViewController: UIPickerViewDelegate {
+    func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
+        
+        if component == 0 {
+            let marka = myModel.marks[row]
+            return marka.name
+        } else {
+            let model = myModel.modelsByMark[row]
+            return model.name
+            
+        }
+    }
     
+    func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
+        if component == 0 {
+            
+            let marka = myModel.marks[row]
+            selectedMarka = marka
+            myModel.modelsByMark = myModel.getModels(markaId: marka.id)
+            pickerView.reloadComponent(1)
+            pickerView.selectRow(0, inComponent: 1, animated: true)
+            
+            let model = self.myModel.modelsByMark[0]
+            selectedModel = model
+            
+            if let marka = selectedMarka, let model = selectedModel {
+                lebleData.text = "\(marka.name) \(model.name)"
+            }
+        } else {
+            let model =  self.myModel.modelsByMark[row]
+            selectedModel = model
+            if let marka = selectedMarka, let model = selectedModel {
+                lebleData.text = "\(marka.name) \(model.name)"
+            }
+        }
+    }
 }
