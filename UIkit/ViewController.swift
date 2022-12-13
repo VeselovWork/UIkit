@@ -36,7 +36,11 @@ class ViewController: UIViewController, UITextViewDelegate{
         // Add Lable
         self.view.addSubview(lebleData)
         self.lebleData.text = "TEST_TEST"
-        self.lebleData.frame = CGRect(x: 150, y: 600, width: 200, height: 30)
+        self.lebleData.frame = CGRect(x: 100, y: 600, width: 200, height: 30)
+        self.lebleData.textAlignment = .center
+        self.lebleData.backgroundColor = .darkGray
+        self.lebleData.clipsToBounds = true
+        self.lebleData.layer.cornerRadius = 10
         
         
         // Add Done Button
@@ -52,6 +56,8 @@ class ViewController: UIViewController, UITextViewDelegate{
         
         // Create MyPickerView
         myPicker.frame = CGRect(x: 50, y: 650, width: 300, height: 100)
+        myPicker.backgroundColor = .darkGray
+        myPicker.layer.cornerRadius = 20
         myPicker.delegate = self
 //        myPicker.center = view.center
         myPicker.dataSource = self
@@ -214,6 +220,10 @@ extension ViewController: UIPickerViewDelegate {
             
         }
     }
+    
+//    func pickerView(_ pickerView: UIPickerView, attributedTitleForRow row: Int, forComponent component: Int) -> NSAttributedString? {
+//        <#code#>
+//    }
     
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
         if component == 0 {
