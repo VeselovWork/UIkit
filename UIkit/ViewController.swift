@@ -19,11 +19,11 @@ class ViewController: UIViewController, UITextViewDelegate{
     var selectedMarka: Marka?
     var selectedModel: Model?
     let lebleData = UILabel()
+    var myDatePicker = UIDatePicker()
     
     
     
-    
-    
+    var peremMyDatePicker = String()
     var menuArrey = ["One", "two", "thee"]
     let imagArrey = [ UIImage (named: "foto1.jpeg"),
                       UIImage (named: "foto2.jpeg"),
@@ -32,6 +32,26 @@ class ViewController: UIViewController, UITextViewDelegate{
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        // Add DatePicker
+        self.view.addSubview(myDatePicker)
+        self.myDatePicker.frame = CGRect(x: 10, y: 420, width: 300 , height: 300)
+        myDatePicker.addTarget(self, action: #selector(datePickerChenge), for: .valueChanged)
+        self.myDatePicker.datePickerMode = .date
+        self.myDatePicker.preferredDatePickerStyle = UIDatePickerStyle.wheels
+        
+        //Add DatePicker limitation
+        var oneYearTime = TimeInterval()
+        oneYearTime = 360 * 24 * 60 * 60
+        
+        let todayDate = Date()
+        let oneYearFromToday = todayDate.addingTimeInterval(oneYearTime)
+        let twoYearFromDate = todayDate.addingTimeInterval(2 * oneYearTime)
+        
+        myDatePicker.minimumDate = oneYearFromToday
+        myDatePicker.maximumDate = twoYearFromDate
+        
+        
         
         // Add Lable
         self.view.addSubview(lebleData)
@@ -44,7 +64,6 @@ class ViewController: UIViewController, UITextViewDelegate{
         
         
         // Add Done Button
-        
         let tooBar: UIToolbar = UIToolbar()
         tooBar.barStyle = .black
         tooBar.items = [
@@ -54,17 +73,16 @@ class ViewController: UIViewController, UITextViewDelegate{
         tooBar.sizeToFit()
         textFild.inputAccessoryView = tooBar
         
-        // Create MyPickerView
+        // Add MyPickerView
         myPicker.frame = CGRect(x: 50, y: 650, width: 300, height: 100)
         myPicker.backgroundColor = .darkGray
         myPicker.layer.cornerRadius = 20
         myPicker.delegate = self
-//        myPicker.center = view.center
         myPicker.dataSource = self
         self.view.addSubview(myPicker)
         
         
-        // Create mySwitch
+        // Add mySwitch
         self.mySwitch.frame = CGRect(x: 20, y: 350, width: 0, height: 0)
         self.view.addSubview(mySwitch)
         self.mySwitch.setOn(true, animated: true)
@@ -76,7 +94,7 @@ class ViewController: UIViewController, UITextViewDelegate{
         
         view.backgroundColor = .darkGray
         
-        
+        // Add imageView
         self.imageView.image = self.imagArrey[0]
         self.imageView.layer.cornerRadius = 30
         imageView.clipsToBounds = true
@@ -93,13 +111,13 @@ class ViewController: UIViewController, UITextViewDelegate{
         leftAnchor.isActive = true
         rightAnchor.isActive = true
         
-        
+        // Add segmentControll
         self.segmentControll = UISegmentedControl(items: self.menuArrey)
         self.segmentControll.frame = CGRect(x: 100, y: 350, width: 200, height: 30)
         self.view.addSubview(self.segmentControll)
         
         
-        
+        // Add errorButton
         errorButton.setTitle("Error", for: .normal)
         errorButton.layer.cornerRadius = 10
         errorButton.backgroundColor = .black
@@ -108,8 +126,7 @@ class ViewController: UIViewController, UITextViewDelegate{
         errorButton.setImage(UIImage(systemName: "folder"), for: .normal)
         
         
-        //        Add textFild parameters
-        //        textFild.frame = CGRect(x: 100, y: 450, width: 200, height: 50)
+        //  Add textFild parameters
         textFild.layer.cornerRadius = 10
         textFild.backgroundColor = .white
         textFild.placeholder = "hello"
@@ -119,9 +136,6 @@ class ViewController: UIViewController, UITextViewDelegate{
         textFild.keyboardType = .phonePad
         
         
-        
-        //        textFild.UITextInputTraits =
-        
         self.view.addSubview(self.textFild)
         
         errorButton.addTarget(self, action: #selector(showButton), for: .touchUpInside)
@@ -130,8 +144,16 @@ class ViewController: UIViewController, UITextViewDelegate{
         
         self.mySwitch.addTarget(self, action: #selector(changeMySwith), for: .valueChanged)
         
-        
     }
+    
+    @objc func datePickerChenge(paramdatePicker: UIDatePicker){
+        if paramdatePicker.isEqual(self.myDatePicker){
+            self.peremMyDatePicker = String("\(paramdatePicker.date)")
+            print("dateChenge:= , \(paramdatePicker.date)")
+            self.lebleData.text = String("\(paramdatePicker.date)")
+        }
+    }
+    
     @objc func changeMySwith(){
         if self.mySwitch.isOn {
             textFild.frame = CGRect(x: 100, y: 450, width: 200, height: 50)
